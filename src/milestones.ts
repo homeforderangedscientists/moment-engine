@@ -1,9 +1,10 @@
 import type { Duration, Instant, Milestone } from './types.js';
 
-export function findReferenceMilestone(_milestones: Milestone[]): Milestone | null {
-  throw new Error('findReferenceMilestone: not implemented');
+export function findReferenceMilestone(milestones: Milestone[]): Milestone | null {
+  return milestones.find((m) => m.is_reference === true) ?? null;
 }
 
-export function computeReferenceSpan(_now: Instant, _milestones: Milestone[]): Duration | null {
-  throw new Error('computeReferenceSpan: not implemented');
+export function computeReferenceSpan(now: Instant, milestones: Milestone[]): Duration | null {
+  const ref = findReferenceMilestone(milestones);
+  return ref ? now - ref.date : null;
 }
