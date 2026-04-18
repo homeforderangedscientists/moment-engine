@@ -59,3 +59,26 @@ describe('calendarPeriodStart', () => {
     );
   });
 });
+
+describe('calendar DST handling', () => {
+  // US DST spring-forward 2026: 2026-03-08 02:00 local → 03:00 local
+  it('day start in America/New_York on DST spring-forward day', () => {
+    const t = Date.UTC(2026, 2, 8, 15, 0); // 11:00 EDT post-spring
+    const start = calendarPeriodStart(t, 'day', 'America/New_York', 'monday');
+    // Local midnight 2026-03-08 NY = 05:00 UTC (still EST before the jump)
+    expect(start).toBe(Date.UTC(2026, 2, 8, 5, 0, 0, 0));
+  });
+
+  it('day start in America/New_York on DST fall-back day', () => {
+    // 2026-11-01 02:00 local repeats
+    const t = Date.UTC(2026, 10, 1, 15, 0);
+    const start = calendarPeriodStart(t, 'day', 'America/New_York', 'monday');
+    // Local midnight 2026-11-01 NY = 04:00 UTC (EDT before the fallback)
+    expect(start).toBe(Date.UTC(2026, 10, 1, 4, 0, 0, 0));
+  });
+
+  it('month start on leap-year February 29', () => {
+    const t = Date.UTC(2024, 1, 29, 12, 0); // 2024 is a leap year
+    expect(calendarPeriodStart(t, 'month', 'UTC', 'monday')).toBe(Date.UTC(2024, 1, 1, 0, 0, 0, 0));
+  });
+});
