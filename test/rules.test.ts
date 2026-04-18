@@ -82,4 +82,30 @@ describe('evaluateRule', () => {
       ).toBeNull();
     });
   });
+
+  describe('calendar_start / calendar_end', () => {
+    it('calendar_start year uses config timezone (UTC)', () => {
+      const t = Date.UTC(2026, 3, 18, 12, 0);
+      expect(
+        evaluateRule({ type: 'calendar_start', period: 'year' }, t, [], { timezone: 'UTC' }),
+      ).toBe(Date.UTC(2026, 0, 1, 0, 0, 0, 0));
+    });
+
+    it('calendar_end year uses config timezone (UTC)', () => {
+      const t = Date.UTC(2026, 3, 18, 12, 0);
+      expect(
+        evaluateRule({ type: 'calendar_end', period: 'year' }, t, [], { timezone: 'UTC' }),
+      ).toBe(Date.UTC(2027, 0, 1, 0, 0, 0, 0));
+    });
+
+    it('calendar_start week honors week_start=sunday', () => {
+      const t = Date.UTC(2026, 3, 18, 12, 0); // Saturday
+      expect(
+        evaluateRule({ type: 'calendar_start', period: 'week' }, t, [], {
+          timezone: 'UTC',
+          week_start: 'sunday',
+        }),
+      ).toBe(Date.UTC(2026, 3, 12, 0, 0, 0, 0));
+    });
+  });
 });
