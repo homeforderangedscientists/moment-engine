@@ -108,4 +108,11 @@ describe('evaluateRule', () => {
       ).toBe(Date.UTC(2026, 3, 12, 0, 0, 0, 0));
     });
   });
+
+  describe('invalid input', () => {
+    it('throws on unknown rule type (invalid input is a caller bug)', () => {
+      const bogus = { type: 'asdf' } as unknown as Rule;
+      expect(() => evaluateRule(bogus, NOW, [])).toThrow(/evaluateRule/);
+    });
+  });
 });

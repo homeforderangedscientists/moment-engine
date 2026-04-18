@@ -41,7 +41,9 @@ export function evaluateRule(
       );
     case 'calendar_end':
       return calendarPeriodEnd(now, rule.period, resolveTimezone(config), resolveWeekStart(config));
-    default:
-      throw new Error(`evaluateRule: ${rule.type} not implemented`);
+    default: {
+      const _exhaustive: never = rule;
+      throw new Error(`evaluateRule: unknown rule type: ${JSON.stringify(_exhaustive)}`);
+    }
   }
 }
