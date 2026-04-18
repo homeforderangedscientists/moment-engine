@@ -1,10 +1,15 @@
 import type { EngineConfig, Instant, Milestone, Rule } from './types.js';
 
 export function evaluateRule(
-  _rule: Rule,
+  rule: Rule,
   _now: Instant,
   _milestones: Milestone[],
   _config?: EngineConfig,
 ): Instant | null {
-  throw new Error('evaluateRule: not implemented');
+  switch (rule.type) {
+    case 'absolute':
+      return rule.date;
+    default:
+      throw new Error(`evaluateRule: ${rule.type} not implemented`);
+  }
 }
