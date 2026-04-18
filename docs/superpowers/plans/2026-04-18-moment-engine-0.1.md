@@ -2001,8 +2001,8 @@ git commit -m "feat(moment): computeMoment + computeMoments with position mode"
 - [ ] **Step 1: Append test**
 
 ```ts
-describe('computeMoment — scale mode', () => {
-  it('fraction = reference_span / container_duration', () => {
+describe('computeMoment — scale & duration modes', () => {
+  it('end=now → duration mode, fraction = container / life', () => {
     const now = Date.UTC(2026, 3, 18);
     const birth = now - 35 * YEAR;
     const c: Container = {
@@ -2014,9 +2014,9 @@ describe('computeMoment — scale mode', () => {
       { id: 'birth', label: 'Born', date: birth, is_reference: true },
     ]);
     expect(m).not.toBeNull();
-    // end=now → duration mode (because end === now)
+    // end=now → duration mode. Per PRD: fraction = container_duration / reference_span.
     expect(m!.rendering_mode).toBe('duration');
-    expect(m!.fraction).toBeCloseTo((35 * YEAR) / (13.8e9 * YEAR), 12);
+    expect(m!.fraction).toBeCloseTo(m!.container_duration / (35 * YEAR), 12);
   });
 
   it('deep past, end far from now → scale mode, fraction = ref/container', () => {
