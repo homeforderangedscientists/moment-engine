@@ -53,7 +53,7 @@
     "size": "size-limit",
     "docs": "typedoc",
     "prepublishOnly": "pnpm run build",
-    "prepare": "husky || true"
+    "prepare": "husky"
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
@@ -63,6 +63,8 @@
     "@vitest/coverage-v8": "^4.1.4",
     "eslint": "^10.2.1",
     "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",

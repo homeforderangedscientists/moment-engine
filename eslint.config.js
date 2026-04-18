@@ -13,6 +13,7 @@ export default [
           allowDefaultProject: [
             'eslint.config.js',
             'commitlint.config.cjs',
+            'lint-staged.config.js',
             'tsup.config.ts',
             'vitest.config.ts',
             'test/*.ts',
