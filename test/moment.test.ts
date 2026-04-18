@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { computeMoment, computeMoments } from '../src/moment.js';
 import type { Container } from '../src/types.js';
 
@@ -61,5 +60,64 @@ describe('computeMoment — scale & duration modes', () => {
     ]);
     expect(m!.rendering_mode).toBe('scale');
     expect(m!.fraction).toBeCloseTo((35 * YEAR) / m!.container_duration, 12);
+  });
+});
+
+describe('computeMoment — metadata & unresolvable', () => {
+  it('passes through metadata unchanged', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const c: Container<{ label: string }> = {
+      id: 'hour',
+      start: { type: 'calendar_start', period: 'hour' },
+      end: { type: 'calendar_end', period: 'hour' },
+      metadata: { label: 'This hour' },
+    };
+    const m = computeMoment(c, now, [], { timezone: 'UTC' });
+    expect(m!.metadata).toEqual({ label: 'This hour' });
+  });
+
+  it('returns null when start rule unresolvable', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const c: Container = {
+      id: 'x',
+      start: { type: 'milestone', milestone_id: 'missing' },
+      end: { type: 'now' },
+    };
+    expect(computeMoment(c, now, [])).toBeNull();
+  });
+
+  it('returns null when end rule unresolvable', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const c: Container = {
+      id: 'x',
+      start: { type: 'now' },
+      end: { type: 'milestone', milestone_id: 'missing' },
+    };
+    expect(computeMoment(c, now, [])).toBeNull();
+  });
+});
+
+describe('computeMoments', () => {
+  it('preserves order, filters nulls', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const cs: Container[] = [
+      {
+        id: 'a',
+        start: { type: 'calendar_start', period: 'year' },
+        end: { type: 'calendar_end', period: 'year' },
+      },
+      {
+        id: 'b',
+        start: { type: 'milestone', milestone_id: 'missing' },
+        end: { type: 'now' },
+      },
+      {
+        id: 'c',
+        start: { type: 'calendar_start', period: 'day' },
+        end: { type: 'calendar_end', period: 'day' },
+      },
+    ];
+    const ms = computeMoments(cs, now, [], { timezone: 'UTC' });
+    expect(ms.map((m) => m.container_id)).toEqual(['a', 'c']);
   });
 });
