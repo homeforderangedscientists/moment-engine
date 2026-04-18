@@ -1,0 +1,28 @@
+{
+  "name": "moment-engine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/home-for-deranged-scientists/moment-engine.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/home-for-deranged-scientists/moment-engine/issues"
+  },
+  "homepage": "https://github.com/home-for-deranged-scientists/moment-engine#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0"
+  }
+}
