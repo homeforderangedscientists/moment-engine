@@ -3,7 +3,7 @@ import ts from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
 
 export default [
-  { ignores: ['dist/**', 'coverage/**', 'node_modules/**'] },
+  { ignores: ['dist/**', 'coverage/**', 'node_modules/**', 'site/**'] },
   js.configs.recommended,
   ...ts.configs.recommendedTypeChecked.map((cfg) => ({
     ...cfg,
