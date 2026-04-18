@@ -1,11 +1,17 @@
 import type { Duration, EngineConfig, Instant, RenderingMode } from './types.js';
 
+const NOW_EPSILON_MS = 1000;
+
 export function selectRenderingMode(
-  _start: Instant,
-  _end: Instant,
-  _now: Instant,
-  _referenceSpan: Duration,
-  _config?: EngineConfig,
+  start: Instant,
+  end: Instant,
+  now: Instant,
+  referenceSpan: Duration,
+  config?: EngineConfig,
 ): RenderingMode {
-  throw new Error('selectRenderingMode: not implemented');
+  if (Math.abs(end - now) < NOW_EPSILON_MS) return 'duration';
+  const threshold = config?.scale_mode_threshold ?? 100;
+  const ratio = (end - start) / referenceSpan;
+  if (ratio > threshold) return 'scale';
+  return 'position';
 }
