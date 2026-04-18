@@ -13,11 +13,11 @@
   ],
   "license": "MIT",
   "author": "Home For Deranged Scientists",
-  "homepage": "https://github.com/home-for-deranged-scientists/moment-engine#readme",
-  "bugs": "https://github.com/home-for-deranged-scientists/moment-engine/issues",
+  "homepage": "https://github.com/homeforderangedscientists/moment-engine#readme",
+  "bugs": "https://github.com/homeforderangedscientists/moment-engine/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/home-for-deranged-scientists/moment-engine.git"
+    "url": "git+https://github.com/homeforderangedscientists/moment-engine.git"
   },
   "type": "module",
   "main": "./dist/index.cjs",
