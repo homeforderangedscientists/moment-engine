@@ -19,6 +19,10 @@ export function evaluateRule(
       const m = milestones.find((x) => x.id === rule.milestone_id);
       return m ? m.date : null;
     }
+    case 'milestone_offset': {
+      const m = milestones.find((x) => x.id === rule.milestone_id);
+      return m ? m.date + rule.offset_years * MS_PER_YEAR : null;
+    }
     default:
       throw new Error(`evaluateRule: ${rule.type} not implemented`);
   }
