@@ -3,7 +3,6 @@ import { describe, it, expect } from 'vitest';
 import { computeMoment, computeMoments } from '../src/moment.js';
 import type { Container } from '../src/types.js';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const YEAR = 365.25 * 24 * 60 * 60 * 1000;
 
 describe('computeMoment — position mode', () => {
@@ -26,5 +25,41 @@ describe('computeMoment — position mode', () => {
     expect(m!.rendering_mode).toBe('position');
     expect(m!.tick_rate).toBe('medium');
     expect(m!.reference_span).toBeNull();
+  });
+});
+
+describe('computeMoment — scale & duration modes', () => {
+  it('end=now → duration mode, fraction = container / life', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const birth = now - 35 * YEAR;
+    const c: Container = {
+      id: 'since-universe',
+      start: { type: 'years_before_present', years: 13.8e9 },
+      end: { type: 'now' },
+    };
+    const m = computeMoment(c, now, [
+      { id: 'birth', label: 'Born', date: birth, is_reference: true },
+    ]);
+    expect(m).not.toBeNull();
+    expect(m!.rendering_mode).toBe('duration');
+    // Duration mode: fraction = container / reference_span (per PRD in types.ts).
+    // For edge cases like big-bang-to-now where container >> life, the resulting
+    // value is large; consumers are expected to format accordingly.
+    expect(m!.fraction).toBeCloseTo(m!.container_duration / (35 * YEAR), 6);
+  });
+
+  it('deep past, end far from now → scale mode, fraction = life / container', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const birth = now - 35 * YEAR;
+    const c: Container = {
+      id: 'since-big-bang-to-next-year',
+      start: { type: 'years_before_present', years: 13.8e9 },
+      end: { type: 'absolute', date: now + YEAR },
+    };
+    const m = computeMoment(c, now, [
+      { id: 'birth', label: 'Born', date: birth, is_reference: true },
+    ]);
+    expect(m!.rendering_mode).toBe('scale');
+    expect(m!.fraction).toBeCloseTo((35 * YEAR) / m!.container_duration, 12);
   });
 });
