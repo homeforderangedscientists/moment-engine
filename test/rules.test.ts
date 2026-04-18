@@ -33,4 +33,18 @@ describe('evaluateRule', () => {
       expect(result!).toBeLessThan(NOW);
     });
   });
+
+  describe('milestone', () => {
+    const MS = [{ id: 'birth', label: 'Born', date: Date.UTC(1990, 0, 1) }];
+
+    it('returns milestone date when found', () => {
+      expect(evaluateRule({ type: 'milestone', milestone_id: 'birth' }, NOW, MS)).toBe(
+        Date.UTC(1990, 0, 1),
+      );
+    });
+
+    it('returns null when milestone missing', () => {
+      expect(evaluateRule({ type: 'milestone', milestone_id: 'unknown' }, NOW, MS)).toBeNull();
+    });
+  });
 });
