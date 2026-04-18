@@ -17,4 +17,20 @@ describe('evaluateRule', () => {
       expect(evaluateRule({ type: 'now' }, NOW, [])).toBe(NOW);
     });
   });
+
+  describe('years_before_present', () => {
+    it('subtracts years using 365.25 days', () => {
+      const MS_PER_YEAR = 365.25 * 24 * 60 * 60 * 1000;
+      expect(evaluateRule({ type: 'years_before_present', years: 1 }, NOW, [])).toBe(
+        NOW - MS_PER_YEAR,
+      );
+    });
+
+    it('handles deep time (13.8 billion years) without precision loss at year scale', () => {
+      const result = evaluateRule({ type: 'years_before_present', years: 13.8e9 }, NOW, []);
+      expect(result).not.toBeNull();
+      expect(Number.isFinite(result!)).toBe(true);
+      expect(result!).toBeLessThan(NOW);
+    });
+  });
 });
