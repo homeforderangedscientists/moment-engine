@@ -11,4 +11,10 @@ describe('evaluateRule', () => {
       expect(evaluateRule(rule, NOW, [])).toBe(Date.UTC(1969, 6, 20));
     });
   });
+
+  describe('now', () => {
+    it('returns the evaluation instant', () => {
+      expect(evaluateRule({ type: 'now' }, NOW, [])).toBe(NOW);
+    });
+  });
 });
