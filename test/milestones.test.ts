@@ -1,5 +1,4 @@
 import { describe, it, expect } from 'vitest';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { findReferenceMilestone, computeReferenceSpan } from '../src/milestones.js';
 import type { Milestone } from '../src/types.js';
 
@@ -22,5 +21,16 @@ describe('findReferenceMilestone', () => {
       { id: 'b', label: 'B', date: 2, is_reference: true },
     ];
     expect(findReferenceMilestone(ms)?.id).toBe('a');
+  });
+});
+
+describe('computeReferenceSpan', () => {
+  it('returns now - reference.date', () => {
+    const ms: Milestone[] = [{ id: 'b', label: 'Birth', date: 1000, is_reference: true }];
+    expect(computeReferenceSpan(5000, ms)).toBe(4000);
+  });
+
+  it('returns null with no reference', () => {
+    expect(computeReferenceSpan(5000, [])).toBeNull();
   });
 });
