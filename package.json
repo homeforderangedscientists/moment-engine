@@ -1,26 +1,60 @@
 {
   "name": "moment-engine",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "version": "0.0.0",
+  "description": "Compute the current moment as a ratio of nested time containers — hours, decades, the age of the universe.",
+  "keywords": [
+    "time",
+    "moment",
+    "calendar",
+    "fraction",
+    "ratio",
+    "duration",
+    "clock"
+  ],
+  "license": "MIT",
+  "author": "Home For Deranged Scientists",
+  "homepage": "https://github.com/home-for-deranged-scientists/moment-engine#readme",
+  "bugs": "https://github.com/home-for-deranged-scientists/moment-engine/issues",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/home-for-deranged-scientists/moment-engine.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/home-for-deranged-scientists/moment-engine/issues"
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   },
-  "homepage": "https://github.com/home-for-deranged-scientists/moment-engine#readme",
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:ci": "vitest run --coverage",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "size": "size-limit",
+    "docs": "typedoc",
+    "prepublishOnly": "pnpm run build",
+    "prepare": "husky || true"
+  },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0"
