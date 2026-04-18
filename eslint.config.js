@@ -5,21 +5,15 @@ import prettier from 'eslint-config-prettier';
 export default [
   { ignores: ['dist/**', 'coverage/**', 'node_modules/**'] },
   js.configs.recommended,
-  ...ts.configs.recommendedTypeChecked,
+  ...ts.configs.recommendedTypeChecked.map((cfg) => ({
+    ...cfg,
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
+  })),
   {
+    files: ['**/*.ts', '**/*.tsx', '**/*.mts', '**/*.cts'],
     languageOptions: {
       parserOptions: {
-        projectService: {
-          allowDefaultProject: [
-            'eslint.config.js',
-            'commitlint.config.cjs',
-            'lint-staged.config.js',
-            'tsup.config.ts',
-            'vitest.config.ts',
-            'test/*.ts',
-            'docs/*.ts',
-          ],
-        },
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
