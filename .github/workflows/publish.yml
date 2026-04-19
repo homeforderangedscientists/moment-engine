@@ -28,3 +28,16 @@ jobs:
         run: npm publish --dry-run --provenance --access public
       - name: Publish to npm
         run: npm publish --provenance --access public
+      - name: Slack publish notification
+        if: success()
+        env:
+          WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          VERSION: ${{ github.event.release.tag_name }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "SLACK_WEBHOOK_URL not configured; skipping notification"
+            exit 0
+          fi
+          PAYLOAD=$(jq -n --arg v "$VERSION" \
+            '{text: (":package: Published moment-engine@" + $v + " to npm")}')
+          curl -s -X POST -H 'Content-Type: application/json' -d "$PAYLOAD" "$WEBHOOK"

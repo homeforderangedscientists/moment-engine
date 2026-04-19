@@ -106,3 +106,23 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
       - run: pnpm size
+
+  ci-notify:
+    name: ci-notify
+    runs-on: ubuntu-latest
+    if: failure() && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    needs: [workflow-lint, test, audit, secrets-scan, size]
+    steps:
+      - name: Slack failure notification
+        env:
+          WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+          SHA: ${{ github.sha }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          if [ -z "$WEBHOOK" ]; then
+            echo "SLACK_WEBHOOK_URL not configured; skipping notification"
+            exit 0
+          fi
+          PAYLOAD=$(jq -n --arg sha "$SHA" --arg url "$RUN_URL" \
+            '{text: (":rotating_light: CI failed on main: " + $sha + "\n" + $url)}')
+          curl -s -X POST -H 'Content-Type: application/json' -d "$PAYLOAD" "$WEBHOOK"
