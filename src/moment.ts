@@ -17,13 +17,24 @@ export function computeMoment<M>(
   if (start === null || end === null) return null;
 
   const container_duration = end - start;
+  if (container_duration <= 0) {
+    throw new Error(
+      `computeMoment: container "${container.id}" is inverted — end (${end}) must be after start (${start})`,
+    );
+  }
+
   const ref = computeReferenceSpan(now, milestones);
   const reference_span = ref ?? config?.fallback_reference_span ?? DEFAULT_FALLBACK_SPAN;
 
   const rendering_mode = selectRenderingMode(start, end, now, reference_span, config);
 
+  // Duration-mode containers end at `now` by definition, so `position` is 1.0
+  // (see the Moment.position contract). For other modes it is where `now` falls
+  // within the container, clamped to [0, 1].
   const position =
-    container_duration === 0 ? 1 : Math.max(0, Math.min(1, (now - start) / container_duration));
+    rendering_mode === 'duration'
+      ? 1
+      : Math.max(0, Math.min(1, (now - start) / container_duration));
 
   let fraction: number;
   switch (rendering_mode) {

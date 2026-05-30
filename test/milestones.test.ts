@@ -33,4 +33,14 @@ describe('computeReferenceSpan', () => {
   it('returns null with no reference', () => {
     expect(computeReferenceSpan(5000, [])).toBeNull();
   });
+
+  it('returns null when the reference milestone is in the future', () => {
+    const ms: Milestone[] = [{ id: 'b', label: 'Birth', date: 9000, is_reference: true }];
+    expect(computeReferenceSpan(5000, ms)).toBeNull();
+  });
+
+  it('returns null when the reference milestone is exactly now (zero span)', () => {
+    const ms: Milestone[] = [{ id: 'b', label: 'Birth', date: 5000, is_reference: true }];
+    expect(computeReferenceSpan(5000, ms)).toBeNull();
+  });
 });

@@ -22,6 +22,10 @@ function getParts(t: Instant, timeZone: string): Parts {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
+    // Force the 0–23 hour cycle. Without this, some ICU builds format midnight
+    // as "24" under hour12:false, and mapping "24" → 0 without adjusting the day
+    // would shift period boundaries by ~24h around local midnight.
+    hourCycle: 'h23',
     weekday: 'short',
   });
   const parts = fmt.formatToParts(new Date(t));

@@ -97,6 +97,42 @@ describe('computeMoment — metadata & unresolvable', () => {
   });
 });
 
+describe('computeMoment — invalid geometry', () => {
+  it('throws when the container end is before its start (inverted container)', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const c: Container = {
+      id: 'inverted',
+      start: { type: 'now' },
+      end: { type: 'years_before_present', years: 10 }, // resolves to 10y before start
+    };
+    expect(() => computeMoment(c, now, [])).toThrow(/inverted/i);
+  });
+
+  it('throws when the container has zero duration (end === start)', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const c: Container = {
+      id: 'instant',
+      start: { type: 'now' },
+      end: { type: 'now' },
+    };
+    expect(() => computeMoment(c, now, [])).toThrow(/inverted/i);
+  });
+});
+
+describe('computeMoment — duration-mode position contract', () => {
+  it('reports position 1.0 in duration mode even when end is just past now', () => {
+    const now = Date.UTC(2026, 3, 18);
+    const c: Container = {
+      id: 'just-past',
+      start: { type: 'years_before_present', years: 10 },
+      end: { type: 'absolute', date: now + 500 }, // within the 1s epsilon → duration mode
+    };
+    const m = computeMoment(c, now, []);
+    expect(m!.rendering_mode).toBe('duration');
+    expect(m!.position).toBe(1);
+  });
+});
+
 describe('computeMoments', () => {
   it('preserves order, filters nulls', () => {
     const now = Date.UTC(2026, 3, 18);

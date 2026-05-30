@@ -9,6 +9,9 @@ export function selectRenderingMode(
   referenceSpan: Duration,
   config?: EngineConfig,
 ): RenderingMode {
+  if (referenceSpan <= 0) {
+    throw new Error(`selectRenderingMode: referenceSpan must be positive, got ${referenceSpan}`);
+  }
   if (Math.abs(end - now) < NOW_EPSILON_MS) return 'duration';
   const threshold = config?.scale_mode_threshold ?? 100;
   const ratio = (end - start) / referenceSpan;

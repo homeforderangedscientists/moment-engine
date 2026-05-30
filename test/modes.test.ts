@@ -38,4 +38,12 @@ describe('selectRenderingMode', () => {
     const start = end - (100 * span + 1);
     expect(selectRenderingMode(start, end, NOW, span, { scale_mode_threshold: 100 })).toBe('scale');
   });
+
+  it('throws when referenceSpan is zero', () => {
+    expect(() => selectRenderingMode(NOW - YEAR, NOW + YEAR, NOW, 0)).toThrow(/referenceSpan/i);
+  });
+
+  it('throws when referenceSpan is negative', () => {
+    expect(() => selectRenderingMode(NOW - YEAR, NOW + YEAR, NOW, -YEAR)).toThrow(/referenceSpan/i);
+  });
 });

@@ -1,6 +1,12 @@
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import ts from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
+
+// Derived via fileURLToPath rather than import.meta.dirname, which only exists
+// on Node >= 20.11 while package.json declares engines.node >= 20.
+const rootDir = dirname(fileURLToPath(import.meta.url));
 
 export default [
   { ignores: ['dist/**', 'coverage/**', 'node_modules/**', 'site/**'] },
@@ -14,7 +20,7 @@ export default [
     languageOptions: {
       parserOptions: {
         project: './tsconfig.eslint.json',
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir: rootDir,
       },
     },
     rules: {
