@@ -170,13 +170,15 @@ export interface Container<M = unknown> {
  * - `position`: where the evaluated instant falls within the container, as a
  *    fraction in [0, 1]. For duration-mode containers (ending at now), this
  *    is always 1.0.
- * - `fraction`: the meaningful quantity for this tile, as a fraction in
- *    [0, 1] or a small positive number approaching zero for deep-time scale
- *    tiles. What `fraction` represents depends on the rendering mode:
- *      - position mode: same as `position` (where now is inside the container)
- *      - scale mode: reference_span / container_duration
- *      - duration mode: container_duration / reference_span
- *    Consumers typically display `fraction * 100` as a percentage.
+ * - `fraction`: the meaningful quantity for this tile. Its range depends on the
+ *    rendering mode and is NOT bounded to [0, 1]:
+ *      - position mode: in [0, 1] — same as `position` (where now is inside the container)
+ *      - scale mode: reference_span / container_duration — a small positive number
+ *        approaching zero for deep-time scale tiles
+ *      - duration mode: container_duration / reference_span — may exceed 1 when the
+ *        container is longer than the reference span (e.g. a deep-time span ending now)
+ *    Consumers typically display `fraction * 100` as a percentage and must not
+ *    assume an upper bound of 1.
  * - `rendering_mode`: the mode selected by the engine for this container.
  * - `tick_rate`: the recommended update frequency for this tile.
  * - `reference_span`: the duration used as the denominator for scale/duration
