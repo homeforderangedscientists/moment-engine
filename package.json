@@ -1,0 +1,77 @@
+{
+  "name": "moment-engine",
+  "version": "0.0.0",
+  "description": "Compute the current moment as a ratio of nested time containers — hours, decades, the age of the universe.",
+  "keywords": [
+    "time",
+    "moment",
+    "calendar",
+    "fraction",
+    "ratio",
+    "duration",
+    "clock"
+  ],
+  "license": "MIT",
+  "author": "Home For Deranged Scientists",
+  "homepage": "https://github.com/homeforderangedscientists/moment-engine#readme",
+  "bugs": "https://github.com/homeforderangedscientists/moment-engine/issues",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/homeforderangedscientists/moment-engine.git"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20"
+  },
+  "packageManager": "pnpm@9.12.0",
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest",
+    "test:ci": "vitest run --coverage",
+    "lint": "eslint . --max-warnings=0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "size": "size-limit",
+    "docs": "typedoc",
+    "prepublishOnly": "pnpm run build",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.5.0",
+    "@commitlint/config-conventional": "^20.5.0",
+    "@eslint/js": "^10.0.1",
+    "@size-limit/preset-small-lib": "^12.1.0",
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^4.1.4",
+    "eslint": "^10.2.1",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.3",
+    "size-limit": "^12.1.0",
+    "tsup": "^8.5.1",
+    "typedoc": "^0.28.19",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.58.2",
+    "vitest": "^4.1.4"
+  }
+}

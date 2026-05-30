@@ -1,0 +1,28 @@
+# Source — we only ship dist/
+src
+test
+docs
+.github
+.husky
+.changeset
+node_modules
+coverage
+site
+
+# Config — consumers don't need it
+tsconfig.json
+tsup.config.ts
+vitest.config.ts
+eslint.config.js
+.prettierrc.json
+.prettierignore
+.editorconfig
+commitlint.config.cjs
+lint-staged.config.js
+.size-limit.json
+.release-please-*.json
+.nvmrc
+
+# Lockfiles + meta
+pnpm-lock.yaml
+.gitignore
